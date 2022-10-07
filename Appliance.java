@@ -1,24 +1,21 @@
 
 import java.util.Scanner;
 
-// test commit
-// hooooooooooooo yereaaaaaaaahahhhhhhhh
-
 /**
  * Assignment 1
  * For COMP  249 Section D - Fall 2022
  * 
- * 
+ * Software for managing appliance store inventory.
  * 
  * @author Linden Wheeler 40195748 and Matej Pederson 40209550
- * @version 1.19
+ * @version 1.33
  */
 class Appliance {
     private String type;
     private String brand;
     private long serialNumber;
     static long SNCtr = 1000000;
-    static  int numOfAppliances = 0;
+    static int numOfAppliances = 0;
     private double price;
 
     /**
@@ -136,7 +133,7 @@ class Appliance {
      * 
      * @return integer number of appliances
      */
-    public int findNumberOfCreatedAppliances(){
+    public static int findNumberOfCreatedAppliances(){
         return numOfAppliances;
     }
 
@@ -162,7 +159,7 @@ class Appliance {
         final String password = "c249";
         int totalAttempts = 0;    // for the total password attempts (max is 12)
         int triedAttempts = 0; // for the password attempts in a row (max is 3)
-        int inventoryCount = 0;	// keeping track of how many appliances have actually been added
+        //int inventoryCount = 0;	// keeping track of how many appliances have actually been added
 
         int code;
         do 
@@ -178,7 +175,7 @@ class Appliance {
                         System.out.println("How many appliances do you want?");
                         
                         int appliancesToAdd = integerCheck(userInput);	// makes sure that user passes a valid integer value
-                        if (inventoryCount + appliancesToAdd <= maxAppliances)
+                        if (findNumberOfCreatedAppliances() + appliancesToAdd <= maxAppliances)
                         {	// making sure that the user doesn't add more appliances than limit
                             for (int i = 1; i <= appliancesToAdd; i++)
                             {	// loops and adds the requested number of appliances
@@ -201,11 +198,11 @@ class Appliance {
 	                                
                                 }
                             }
-                        	inventoryCount += appliancesToAdd;	// adds number of appliances to inventory count
+                        	//inventoryCount += appliancesToAdd;	// adds number of appliances to inventory count
                         }
                         else
                         {
-                            System.out.println("There are only " + (maxAppliances - inventoryCount) + " spaces left");
+                            System.out.println("There are only " + (maxAppliances - findNumberOfCreatedAppliances()) + " spaces left");
                         }
                         
                         triedAttempts = 0;	// password attempts are reset if the user correctly enters the pass-code
@@ -265,7 +262,7 @@ class Appliance {
                                 System.out.println("Serial number does not match any appliance.");
                                 System.out.println("If you would like to try another serial number, enter y below. " +
                                 "Otherwise you will be taken back to the main menu");
-                                String response = userInput.nextLine();	// changed to nextLine
+                                String response = userInput.nextLine();
                                 if (!(response.equals("y")))
                                 {
                                     break;
