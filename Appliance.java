@@ -5,7 +5,20 @@ import java.util.Scanner;
  * Assignment 1
  * For COMP  249 Section D - Fall 2022
  * 
- * Software for managing appliance store inventory.
+ * Software for managing appliance store inventory. The user is able to add, view, and edit appliances in order to keep track
+ * of inventory in their store.
+ * 
+ * Static methods (integerCheck, longCheck, doubleCheck, typeCheck) are used in order to check that the user has entered valid data types.
+ * For these methods a scanner object is passed in order to only use one scanner object throughout the program, as using multiple can
+ * easily create errors. These methods loop until the user enters a valid data type, allowing for incorrect data type entry errors
+ * to be handled.
+ * 
+ * Two menu functions also exist (menuOptions and editMenuOptions) which are controlled using static methods that take
+ * a scanner object as a parameter, which makes the driver much more readable.
+ * 
+ * The menu codes are within a do while loop and use the various static methods in order to control their flow. In line comments
+ * are included to aid with following the logic as code 1 and code 2 still have complex structure even with the help of the
+ * static methods.
  * 
  * @author Linden Wheeler 40195748 and Matej Pederson 40209550
  * @version 1.33
@@ -159,26 +172,22 @@ class Appliance {
         final String password = "c249";
         int totalAttempts = 0;    // for the total password attempts (max is 12)
         int triedAttempts = 0; // for the password attempts in a row (max is 3)
-        //int inventoryCount = 0;	// keeping track of how many appliances have actually been added
 
         int code;
         do 
-        {
+        {   // Loops showing menu options until user enters a valid menu code
             code = menuOptions(userInput);
 
             if (code == 1)
             {
                 while (triedAttempts < 3){	// loops three times to give the user three chances to enter correct password
                     System.out.println("Please enter password to add a new appliance: ");
-                    String enteredPassword = userInput.nextLine();	//changed to nextLine
+                    String enteredPassword = userInput.nextLine();
                     if (enteredPassword.equals(password)){
                         System.out.println("How many appliances do you want?");
-                        
-                        int appliancesToAdd = integerCheck(userInput);	// makes sure that user passes a valid integer value
-                        if (findNumberOfCreatedAppliances() + appliancesToAdd <= maxAppliances)
-                        {	// making sure that the user doesn't add more appliances than limit
-                            for (int i = 1; i <= appliancesToAdd; i++)
-                            {	// loops and adds the requested number of appliances
+                        int appliancesToAdd = integerCheck(userInput);	// valid integer check
+                        if (findNumberOfCreatedAppliances() + appliancesToAdd <= maxAppliances){    // user cannot add more appliances than the space left
+                            for (int i = 1; i <= appliancesToAdd; i++){	// loops and adds the requested number of appliances
                                 System.out.println();
                                 System.out.println("Adding appliance " + i);
                                 while (true) {	// Loops until user enters a valid type
@@ -188,24 +197,21 @@ class Appliance {
 		                                System.out.print("Please enter appliance brand: ");
 		                                String enteredBrand = userInput.nextLine();
 		                                System.out.print("Please enter appliance price: ");
-		                                double enteredPrice = doubleCheck(userInput);	// makes sure that user passes a valid double value
-		
-		                                inventory[numOfAppliances] = new Appliance(enteredType, enteredBrand, enteredPrice);
-		                                // creates appliance object according to given info by user and places in the inventory array
+		                                double enteredPrice = doubleCheck(userInput);	// valid double check
+		                                inventory[findNumberOfCreatedAppliances()] = new Appliance(enteredType, enteredBrand, enteredPrice);
 		                                System.out.println();
 		                                break;
 	                                }
 	                                
                                 }
                             }
-                        	//inventoryCount += appliancesToAdd;	// adds number of appliances to inventory count
                         }
                         else
                         {
-                            System.out.println("There are only " + (maxAppliances - findNumberOfCreatedAppliances()) + " spaces left");
+                            System.out.println("There are " + (maxAppliances - findNumberOfCreatedAppliances()) + " spaces left, cannot add " + appliancesToAdd + " appliances");
                         }
                         
-                        triedAttempts = 0;	// password attempts are reset if the user correctly enters the pass-code
+                        triedAttempts = 0;	// both password attempts are reset if the user correctly enters the pass-code
                         totalAttempts = 0;
                         break; // to break out of password check loop
                     } 
@@ -217,7 +223,7 @@ class Appliance {
                     } 
                 }	// PASSWORD LOOP
                 
-                triedAttempts = 0;	// reset the tried attempts but leave the total attempts since after 12 wrong attempts total the system is suspended
+                triedAttempts = 0;	// reset the tried attempts but leave the total attempts since after 12 wrong total attempts the system is suspended
                 if (totalAttempts == 12)
                 {
 
@@ -295,19 +301,19 @@ class Appliance {
             else if(code == 4)
             {
                 System.out.print("Please enter a price: ");
-            	int price = integerCheck(userInput); // to verify integer is entered
+            	int price = integerCheck(userInput); // valid integer check
             	findCheaperThan(price, inventory);	// all the work is in the static method
             }
             
         }
-        while (code != 5);
+        while (code != 5);  // if user enters code 5, the program stops
         System.out.println("Thanks for using the Appliance manager software!");
         userInput.close();
     }   // MAIN
     
     
     /**
-     * Loops until the user enters a valid code, redisplaying the menu each time.
+     * Loops until the user enters a valid code, redisplaying the main menu each time.
      * 
      * @param input Scanner object used in driver
      * @return	valid integer code from 1 to 5
