@@ -1,10 +1,14 @@
 
 import java.util.Scanner;
 
+// test commit
+// hooooooooooooo yereaaaaaaaahahhhhhhhh
 
 /**
  * Assignment 1
  * For COMP  249 Section D - Fall 2022
+ * 
+ * 
  * 
  * @author Linden Wheeler 40195748 and Matej Pederson 40209550
  * @version 1.19
@@ -525,23 +529,14 @@ class Appliance {
 
                     case 2:
                         System.out.println("Please enter the new type: ");
-                        if(input.hasNext())	// everything is a valid string my guy
+                        String newType = input.nextLine();
+                        typeCheck(newType);
+                        if(typeCheck(newType) == true)
                         {
-                            String newType = input.nextLine();
-                            typeCheck(newType);
-                            if(typeCheck(newType) == true)
-                            {
-                                this.setType(newType);
-                                System.out.println("Updated info for this applaince:");
-                                System.out.println(this);
-                            }
-                            
+                            this.setType(newType);
+                            System.out.println("Updated info for this applaince:");
+                            System.out.println(this);
                         }
-                        else
-                        {
-                            System.out.println("Please enter a valid string.");
-                        }
-                        break;
 
                     case 3:
                         System.out.println("Please enter the new price: ");
