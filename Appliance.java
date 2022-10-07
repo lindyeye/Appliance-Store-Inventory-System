@@ -82,16 +82,16 @@ class Appliance {
     }
 
     /**
-     * Returns serial sumber of appliance.
+     * Returns serial number of appliance.
      * 
-     * @return long serial sumber of appliance
+     * @return long serial number of appliance
      */
     public long getSerialNumber(){
         return serialNumber;
     }
 
     /**
-     * Sets serial sumber of appliance.
+     * Sets serial number of appliance.
      * 
      * @param serialNumber serial number of appliance
      */
@@ -130,7 +130,7 @@ class Appliance {
     /**
      * Returns number of appliances created.
      * 
-     * @return int number of appliances
+     * @return integer number of appliances
      */
     public int findNumberOfCreatedAppliances(){
         return numOfAppliances;
@@ -169,10 +169,10 @@ class Appliance {
             {
                 while (triedAttempts < 3){	// loops three times to give the user three chances to enter correct password
                     System.out.println("Please enter password to add a new appliance: ");
-                    String enteredPassword = userInput.next();
+                    String enteredPassword = userInput.nextLine();	//changed to nextLine
                     if (enteredPassword.equals(password)){
                         System.out.println("How many appliances do you want?");
-                        userInput.nextLine(); // clears buffer
+                        
                         int appliancesToAdd = integerCheck(userInput);	// makes sure that user passes a valid integer value
                         if (inventoryCount + appliancesToAdd <= maxAppliances)
                         {	// making sure that the user doesn't add more appliances than limit
@@ -234,13 +234,13 @@ class Appliance {
                 while(triedAttempts < 3)
                 {
                     System.out.println("Please enter password to edit an appliance: ");
-                    String enteredPassword = userInput.next();
+                    String enteredPassword = userInput.nextLine();
                     if (enteredPassword.equals(password)){
                         boolean updatingAppliance = true;
                         while (updatingAppliance)
                         {
                             System.out.println("Please enter the serial number of the appliance you would like to edit:");
-                            userInput.nextLine();	// clears buffer
+                            
                             enteredSN = longCheck(userInput);
                             if (findAppliancesBySerialNumber(enteredSN, inventory) != null)
                             { 
@@ -261,7 +261,7 @@ class Appliance {
                                 System.out.println("Serial number does not match any appliance.");
                                 System.out.println("If you would like to try another serial number, enter y below. " +
                                 "Otherwise you will be taken back to the main menu");
-                                String response = userInput.next();
+                                String response = userInput.nextLine();	// changed to nextLine
                                 if (!(response.equals("y")))
                                 {
                                     break;
@@ -286,7 +286,7 @@ class Appliance {
             else if(code == 3)
             {
                 System.out.print("Please enter a brand name: ");
-                //userInput.nextLine(); // clears buffer
+                
                 String brand = userInput.nextLine();
             	findAppliancesBy(brand, inventory);	// all the work is in the static method
             }
@@ -321,7 +321,6 @@ class Appliance {
             System.out.println("\t5.\tQuit");
             System.out.println("Please enter your choice>"); 
             
-            input.nextLine(); // clears buffer
 	        int inputNum = integerCheck(input);	// to prevent errors if the user enters a non integer value
             if (inputNum > 0 && inputNum <= 5){
                 return inputNum;
@@ -329,6 +328,7 @@ class Appliance {
             else{
                 System.out.println("Please enter an valid code\n");
             }
+            System.out.println();
         }
     }
     
@@ -408,10 +408,11 @@ class Appliance {
      */
     public static int integerCheck(Scanner input) {
     	while (!(input.hasNextInt())) {
-            String garbage = input.nextLine();	// stores invalid value in garbage variable
+    		input.nextLine();	// stores invalid value in garbage variable
             System.out.print("Please enter an integer value: ");
         }	
         int intOut = input.nextInt();
+        input.nextLine();	// clears buffer
     	return intOut;
     }
     
@@ -423,10 +424,11 @@ class Appliance {
      */
     public static double doubleCheck(Scanner input) {	
     	while (!(input.hasNextDouble())) {
-            String garbage = input.nextLine();	// stores invalid value in garbage variable
+            input.nextLine();	// stores invalid value in garbage variable
             System.out.print("Please enter an double value: ");
         }
         double doubleOut = input.nextDouble();
+        input.nextLine();	// clears buffer
     	return doubleOut;
     }
     
@@ -440,10 +442,11 @@ class Appliance {
     {
         while(!(input.hasNextLong()))
         {
-            String garbage = input.nextLine();	// stores invalid value in garbage variable
+            input.nextLine();	// stores invalid value in garbage variable
             System.out.println("Please enter a long value: ");
         }
         long longOut = input.nextLong();
+        input.nextLine();	// clears buffer
         return longOut;
     }
     
@@ -487,7 +490,6 @@ class Appliance {
             System.out.println("\t4.\tQuit");
             System.out.println("Please enter your choice>"); 
             
-            input.nextLine();	// clears buffer
             int inputNum = integerCheck(input);	// to prevent errors if the user enters a non integer value
             if (inputNum > 0 && inputNum <= 4)
             {
@@ -497,6 +499,7 @@ class Appliance {
             {
                 System.out.println("Please enter an valid code\n");
             }
+            System.out.println();
         }
         
     }
@@ -522,21 +525,28 @@ class Appliance {
 
                     case 2:
                         System.out.println("Please enter the new type: ");
-                        
-                        String newType = input.nextLine();
-                        typeCheck(newType);
-                        if(typeCheck(newType) == true)
+                        if(input.hasNext())	// everything is a valid string my guy
                         {
-                            this.setType(newType);
-                            System.out.println("Updated info for this applaince:");
-                            System.out.println(this);
+                            String newType = input.nextLine();
+                            typeCheck(newType);
+                            if(typeCheck(newType) == true)
+                            {
+                                this.setType(newType);
+                                System.out.println("Updated info for this applaince:");
+                                System.out.println(this);
+                            }
+                            
+                        }
+                        else
+                        {
+                            System.out.println("Please enter a valid string.");
                         }
                         break;
 
                     case 3:
                         System.out.println("Please enter the new price: ");
-                        input.nextLine();	// clears buffer
-                        double newPrice = input.nextDouble();
+                        
+                        double newPrice = doubleCheck(input);
                         this.setPrice(newPrice);
                         System.out.println(this);
                     break;
@@ -544,8 +554,9 @@ class Appliance {
                     case 4:
                         break;       
                 }
-
+                System.out.println();
     }
     
 
 }   // CLASS
+
