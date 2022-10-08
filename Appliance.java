@@ -191,17 +191,20 @@ class Appliance {
                                 System.out.println();
                                 System.out.println("Adding appliance " + i);
                                 while (true) {	// Loops until user enters a valid type
+                                    
                                 	System.out.print("Please enter appliance type: ");
-                                    String enteredType = userInput.nextLine();
-	                                if (typeCheck(enteredType) == true) {
-		                                System.out.print("Please enter appliance brand: ");
-		                                String enteredBrand = userInput.nextLine();
-		                                System.out.print("Please enter appliance price: ");
-		                                double enteredPrice = doubleCheck(userInput);	// valid double check
-		                                inventory[findNumberOfCreatedAppliances()] = new Appliance(enteredType, enteredBrand, enteredPrice);
-		                                System.out.println();
-		                                break;
-	                                }
+                                    String enteredType = typeCheck(userInput);
+                                    
+                                    //String newType = typeCheck(enteredType, userInput);
+                                    //System.out.println(newType);
+                                    System.out.print("Please enter appliance brand: ");
+                                    String enteredBrand = userInput.nextLine();
+                                    System.out.print("Please enter appliance price: ");
+                                    double enteredPrice = doubleCheck(userInput);	// valid double check
+                                    inventory[findNumberOfCreatedAppliances()] = new Appliance(enteredType, enteredBrand, enteredPrice);
+                                    System.out.println();
+                                    break;
+	                                
 	                                
                                 }
                             }
@@ -242,14 +245,14 @@ class Appliance {
                 {
                     System.out.println("Please enter password to edit an appliance: ");
                     String enteredPassword = userInput.nextLine();
-                    if (enteredPassword.equals(password)){
+                    if (enteredPassword.equals(password)){ //password checking
                         boolean updatingAppliance = true;
-                        while (updatingAppliance)
+                        while (updatingAppliance)//loops through this until user enters 4 to quit
                         {
                             System.out.println("Please enter the serial number of the appliance you would like to edit:");
                             
                             enteredSN = longCheck(userInput);
-                            if (findAppliancesBySerialNumber(enteredSN, inventory) != null)
+                            if (findAppliancesBySerialNumber(enteredSN, inventory) != null)//if the serial number exists
                             { 
                             	Appliance chosenAppliance = findAppliancesBySerialNumber(enteredSN, inventory);
                             	System.out.println("Appliance Serial # " + chosenAppliance.getSerialNumber()
@@ -257,13 +260,13 @@ class Appliance {
                                         + "\nType: " + chosenAppliance.getType()
                                         + "\nPrice: " + chosenAppliance.getPrice());
                                 int editCode = editMenuOptions(userInput);
-                                if(editCode == 4)
+                                if(editCode == 4)//quits back to main menu
                                 {
                                     break;
                                 }
-                                findAppliancesBySerialNumber(enteredSN, inventory).editAppliance(editCode, userInput);
+                                findAppliancesBySerialNumber(enteredSN, inventory).editAppliance(editCode, userInput);//calls the editing method
                             }
-                            else
+                            else//if SN does not exist, prompts to try again or go to main menu
                             {
                                 System.out.println("Serial number does not match any appliance.");
                                 System.out.println("If you would like to try another serial number, enter y below. " +
@@ -458,25 +461,31 @@ class Appliance {
     }
     
     /**
-     * Verifies that the type of entered appliance is a valid type.
+     * loops until a valid type is entered
      * 
      * @param enteredType String type of appliance
+     * @param input Scanner object from driver
      * @return	boolean value (true if entered appliance type is a valid type)
      */
-    public static Boolean typeCheck(String enteredType)
+    public static String typeCheck(Scanner input)
     {
-        String[] types = { "Fridge", "Air Conditioner", "Washer", "Dryer",
-            "Freezer", "Stove", "Dishwasher", "Water Heaters", "Microwave"};
+        boolean running = true;
+        while(running){ //loops until a valid type is entered
+            String enteredType = input.nextLine();
+            String[] types = {"Fridge", "Air Conditioner", "Washer", "Dryer",
+            "Freezer", "Stove", "Dishwasher", "Water Heaters", "Microwave"}; //acceptable appliances
             for(int n = 0; n<8; n++)
             {
                 if(types[n].equals(enteredType))
                 {
-                    return true;
+                    return enteredType;
                 }
             }
             System.out.println("Please enter a valid type (Fridge, Air Conditioner, Washer, Dryer, "
             		+ "Freezer, Stove, Dishwasher, Water Heaters, Microwave): ");
-            return false; 
+        }
+        return "";
+            
     }
     
     /**
@@ -512,16 +521,20 @@ class Appliance {
     }
 
     /**
+     * Handles each option from editMenuOptions(), lets user edit their appliance
      * 
      * 
-     * @param code
-     * @param input
+     * @param code int to determine which attribute they will edit
+     * @param input Scanner from driver
+     * @see typeCheck
+     * @see doubleCheck
+     * 
      */
     public void editAppliance(int code, Scanner input)
     {
                 switch(code)
                 {
-                    case 1:
+                    case 1: //brand
 
                         System.out.println("Please enter the new brand: ");
                         String newBrand = input.nextLine();
@@ -530,26 +543,25 @@ class Appliance {
                         System.out.println(this);
                         break;
 
-                    case 2:
+                    case 2: //type
                         System.out.println("Please enter the new type: ");
-                        String newType = input.nextLine();
-                        typeCheck(newType);
-                        if(typeCheck(newType) == true)
-                        {
-                            this.setType(newType);
-                            System.out.println("Updated info for this applaince:");
-                            System.out.println(this);
-                        }
+                        String newType = typeCheck(input);
+                        
+                        this.setType(newType);
+                        System.out.println("Updated info for this appliance:");
+                        System.out.println(this);
+                        break;   
+                        
 
-                    case 3:
+                    case 3: //price
                         System.out.println("Please enter the new price: ");
                         
                         double newPrice = doubleCheck(input);
                         this.setPrice(newPrice);
                         System.out.println(this);
-                    break;
+                        break;
 
-                    case 4:
+                    case 4: //quit
                         break;       
                 }
                 System.out.println();
