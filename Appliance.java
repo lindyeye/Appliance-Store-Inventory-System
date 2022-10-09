@@ -474,7 +474,7 @@ class Appliance {
             String enteredType = input.nextLine();
             String[] types = {"Fridge", "Air Conditioner", "Washer", "Dryer",
             "Freezer", "Stove", "Dishwasher", "Water Heaters", "Microwave"}; //acceptable appliances
-            for(int n = 0; n<8; n++)
+            for(int n = 0; n<9; n++)
             {
                 if(types[n].equals(enteredType))
                 {
