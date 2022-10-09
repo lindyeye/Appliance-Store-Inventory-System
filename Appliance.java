@@ -21,7 +21,7 @@ import java.util.Scanner;
  * static methods.
  * 
  * @author Linden Wheeler 40195748 and Matej Pederson 40209550
- * @version 1.33
+ * @version 1.35
  */
 class Appliance {
     private String type;
@@ -166,7 +166,7 @@ class Appliance {
         Scanner userInput = new Scanner(System.in);
         System.out.println("Welcome to the fantastic appliance tracking software!");
         System.out.println("What is the maximum amount of appliances that your store can contain, or the max amount that you would like to aquire?");
-        int maxAppliances = integerCheck(userInput);	// go check out integerCheck()
+        int maxAppliances = integerCheckPos(userInput);	// go check out integerCheck()
         Appliance[] inventory = new Appliance[maxAppliances];
         
         final String password = "c249";
@@ -253,7 +253,8 @@ class Appliance {
                             
                             enteredSN = longCheck(userInput);
                             if (findAppliancesBySerialNumber(enteredSN, inventory) != null)//if the serial number exists
-                            { 
+                            {
+                                System.out.println();
                             	Appliance chosenAppliance = findAppliancesBySerialNumber(enteredSN, inventory);
                             	System.out.println("Appliance Serial # " + chosenAppliance.getSerialNumber()
                                         + "\nBrand: " + chosenAppliance.getBrand()
@@ -274,8 +275,10 @@ class Appliance {
                                 String response = userInput.nextLine();
                                 if (!(response.equals("y")))
                                 {
+                                    System.out.println();
                                     break;
                                 }
+                                System.out.println();
                             }
                         }
                         triedAttempts = 0;
@@ -326,8 +329,8 @@ class Appliance {
             System.out.println("What do you want to do?");
             System.out.println("\t1.\tEnter new appliances");
             System.out.println("\t2.\tChange information of an appliance (password required)");
-            System.out.println("\t3.\tDisplay all appliances of by a specific brand");
-            System.out.println("\t4.\tDisplay all appliances under a certain price");
+            System.out.println("\t3.\tDisplay all appliances by a specific brand");
+            System.out.println("\t4.\tDisplay all appliances under a certain price.");
             System.out.println("\t5.\tQuit");
             System.out.println("Please enter your choice>"); 
             
@@ -423,6 +426,25 @@ class Appliance {
         }	
         int intOut = input.nextInt();
         input.nextLine();	// clears buffer
+    	return intOut;
+    }
+
+    /**
+     * Loops until user enters a valid integer value that is positive.
+     * 
+     * @param input Scanner object from driver
+     * @return	valid integer value
+     */
+    public static int integerCheckPos(Scanner input) {
+    	while (!(input.hasNextInt())) {
+    		input.nextLine();	// stores invalid value in garbage variable
+            System.out.print("Please enter an integer value: ");
+        }	
+        int intOut = input.nextInt();
+        input.nextLine();	// clears buffer
+        if (intOut < 0){
+            intOut = 0;
+        }
     	return intOut;
     }
     
@@ -539,6 +561,7 @@ class Appliance {
                         System.out.println("Please enter the new brand: ");
                         String newBrand = input.nextLine();
                         this.setBrand(newBrand);
+                        System.out.println();
                         System.out.println("Updated info for this applaince:");
                         System.out.println(this);
                         break;
@@ -546,8 +569,8 @@ class Appliance {
                     case 2: //type
                         System.out.println("Please enter the new type: ");
                         String newType = typeCheck(input);
-                        
                         this.setType(newType);
+                        System.out.println();
                         System.out.println("Updated info for this appliance:");
                         System.out.println(this);
                         break;   
@@ -558,6 +581,8 @@ class Appliance {
                         
                         double newPrice = doubleCheck(input);
                         this.setPrice(newPrice);
+                        System.out.println();
+                        System.out.println("Updated info for this appliance:");
                         System.out.println(this);
                         break;
 
